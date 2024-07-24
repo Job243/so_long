@@ -1,12 +1,22 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_map_2.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jmafueni <jmafueni@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/23 12:10:04 by jmafueni          #+#    #+#             */
+/*   Updated: 2024/07/24 15:49:54 by jmafueni         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "so_long.h"
 
 int is_rectangular(char **map)
 {
     int len;
     int i;
-    
+
     i = 1;
     len = strlen(map[0]);
     while (map[i])
