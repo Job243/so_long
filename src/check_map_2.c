@@ -6,7 +6,7 @@
 /*   By: jmafueni <jmafueni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:10:04 by jmafueni          #+#    #+#             */
-/*   Updated: 2024/07/24 15:49:54 by jmafueni         ###   ########.fr       */
+/*   Updated: 2024/08/08 16:07:55 by jmafueni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ int is_rectangular(char **map)
     int i;
 
     i = 1;
-    len = strlen(map[0]);
+    len = ft_strlen(map[0]);
     while (map[i])
     {
-        if (strlen(map[i]) != len)
+        if (ft_strlen(map[i]) != len)
             return (0);
         i++;
     }
@@ -34,7 +34,7 @@ int has_valid_borders(char **map)
     int i;
 
     i = 0;
-    len = strlen(map[0]);
+    len = ft_strlen(map[0]);
     while (map[0][i])
     {
         if (map[0][i] != '1' || map[len - 1][i] != '1')

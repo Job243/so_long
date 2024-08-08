@@ -6,7 +6,7 @@
 /*   By: jmafueni <jmafueni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:23:26 by jmafueni          #+#    #+#             */
-/*   Updated: 2024/07/24 16:16:10 by jmafueni         ###   ########.fr       */
+/*   Updated: 2024/08/08 16:06:48 by jmafueni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <mlx.h>
 # include <X11/keysym.h>
 # define  ERR_MALLOC -3
-# define SUCCESS 100cd
+# define SUCCESS 100
 # ifndef TILE_SET
 #  define TILE_set 80
 # endif
@@ -60,5 +60,7 @@ typedef struct	s_data
 	t_vars		*vars;
 }	t_data;
 
+int	close_window(t_vars *vars);
+int	check_map_name(char *s);
 
 #endif
