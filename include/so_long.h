@@ -6,7 +6,7 @@
 /*   By: jmafueni <jmafueni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:23:26 by jmafueni          #+#    #+#             */
-/*   Updated: 2024/08/08 16:06:48 by jmafueni         ###   ########.fr       */
+/*   Updated: 2024/08/09 15:47:36 by jmafueni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,7 @@ typedef struct	s_data
 
 int	close_window(t_vars *vars);
 int	check_map_name(char *s);
+int	count_char(char **map, int rows, char c);
+int	is_enclosed_in_wall(char **map, int rows, int cols);
 
 #endif
