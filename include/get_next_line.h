@@ -26,16 +26,16 @@
 # define  ERR_MALLOC -3
 # define SUCCESS 100
 
-typedef struct s_list
+/*typedef struct s_list
 {
 	char			*content;
 	struct s_list	*next;
-}					t_list;
+}					t_list;*/
 
 t_list	*ft_lstlast(t_list *stash);
 char	*get_next_line(int fd);
 int		ft_found_newline(t_list *stash);
-int		ft_strlen(char *str);
+int		ft_strlen1(char *str);
 int		add_to_stash(t_list **stash, char *buf, int bytes_read);
 int		extract_line(t_list *stash, char **line);
 int		generate_line(t_list *stash, char **line);

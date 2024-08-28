@@ -71,7 +71,7 @@ int	generate_line(t_list *stash, char **line)
 	return (SUCCESS);
 }
 
-int	ft_strlen(char *str)
+int	ft_strlen1(char *str)
 {
 	int	i;
 

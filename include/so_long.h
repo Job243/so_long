@@ -11,14 +11,16 @@
 /* ************************************************************************** */
 
 #ifndef SO_LONG_H
-# define SO_LONG.H
+# define SO_LONG_H
 
 # include "libft.h"
 # include "get_next_line.h"
 # include <mlx.h>
 # include <X11/keysym.h>
+#include <X11/X.h>
 # define  ERR_MALLOC -3
 # define SUCCESS 100
+# define FAILURE 1
 # ifndef TILE_SET
 #  define TILE_set 80
 # endif
@@ -26,13 +28,13 @@
 #  define BUFFER_SIZE 5
 # endif
 
-typedef struct	s_vars
+typedef struct s_vars
 {
 	void	*mlx_ptr;
 	void	*win_ptr;
 }	t_vars;
 
-typedef struct	s_game
+typedef struct s_game
 {
 	int		player_x;
 	int		player_y;
@@ -41,7 +43,7 @@ typedef struct	s_game
 	int		move_count;
 }	t_game;
 
-typedef struct	s_data
+typedef struct s_data
 {
 	char		**map;
 	void		*img_ptr_wall;
@@ -54,6 +56,7 @@ typedef struct	s_data
 	char		*path_player;
 	char		*path_item;
 	char		*path_exit;
+	int			fd;
 	int			width;
 	int			height;
 	t_game		*game;
@@ -62,7 +65,10 @@ typedef struct	s_data
 
 int	close_window(t_vars *vars);
 int	check_map_name(char *s);
-int	count_char(char **map, int rows, char c);
+int	count_char(char **map, char c);
 int	is_enclosed_in_wall(char **map, int rows, int cols);
+int	validate_map(char **map);
+int	validate_char(char **map);
+size_t	ft_strlen(const char *str);
 
 #endif

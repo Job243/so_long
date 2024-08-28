@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../include/so_long.h"
 #include "get_next_line.h"
 
 int	close_window(t_vars *vars)
