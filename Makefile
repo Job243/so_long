@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: jmafueni <jmafueni@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/11/15 09:42:50 by smolines          #+#    #+#              #
-#    Updated: 2024/07/16 15:07:19 by jmafueni         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 # Nom de l'exécutable
 NAME = so_long
 
@@ -20,13 +8,16 @@ LIBFT_DIR = libft
 MLX_DIR = minilibx-linux
 
 # Les fichiers source
-SRC = $(SRC_DIR)/main.c $(SRC_DIR)/check_map_utils.c $(SRC_DIR)/utils.c $(SRC_DIR)/free.c
+SRC = $(SRC_DIR)/main.c $(SRC_DIR)/check_map_utils.c $(SRC_DIR)/utils.c $(SRC_DIR)/free.c \
+		$(SRC_DIR)/initialization.c $(SRC_DIR)/event.c $(SRC_DIR)/create_map.c \
+		$(SRC_DIR)/get_next_line.c $(SRC_DIR)/get_next_line_utils.c \
+		$(SRC_DIR)/map.c
 
 # Les fichiers objets générés à partir des sources
 OBJ = $(SRC:.c=.o)
 
 # Les options du compilateur (-I pour inclure les chemins vers les headers)
-CFLAGS = -Wall -Wextra -Werror -I$(INCLUDE_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
+CFLAGS = -Wall -Wextra -Werror -g3 -I$(INCLUDE_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
 
 # Commande du compilateur
 CC = gcc

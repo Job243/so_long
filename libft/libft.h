@@ -61,13 +61,14 @@ long int	ft_atoi(const char *nptr);
 
 typedef struct s_list
 {
+	char			*content;
 	int				value;
 	int				index;
 	int				pos;
 	int				target_pos;
 	int				cost_a;
 	int				cost_b;
-	void			*content;
+	void			*contents;
 	struct s_list	*next;
 }					t_list;
 

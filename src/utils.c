@@ -30,17 +30,8 @@ int	check_map_name(char *s)
 	return (1);
 }
 
-int	is_only_one_exit(char **map, int rows)
-{
-	return (count_char(map, rows, 'E') == 1);
-}
-
-int	is_only_one_player(char **map, int rows)
-{
-	return (count_char(map, rows, 'P') == 1);
-}
-
-int	is_collectable(char **map, int rows)
-{
-	return (count_char(map, rows, 'C') == 1);
-}
+// int	map_error(char *error, t_data *data)
+// {
+// 	ft_free(char **map);
+// 	return (ft_putstr_fd(err, 1), 0);
+// }

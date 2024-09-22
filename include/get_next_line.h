@@ -23,6 +23,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <string.h>
+#include "../libft/libft.h"
 # define  ERR_MALLOC -3
 # define SUCCESS 100
 
