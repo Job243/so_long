@@ -6,7 +6,7 @@
 /*   By: jmafueni <jmafueni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:58:45 by jmafueni          #+#    #+#             */
-/*   Updated: 2024/09/25 16:22:55 by jmafueni         ###   ########.fr       */
+/*   Updated: 2024/09/25 20:28:18 by jmafueni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,12 +213,10 @@ int main(int argc, char **argv)
 	if (!validate_map(&data))
 	{
 		map_error("Error: Invalid map\n", &data);
+		free_vars(&data);
 		return (1);
 	}
-	printf("Map loaded successfully\n");
-	map_error(NULL, &data);
-	// Afficher la map pour vérification
-
+	so_long(&data);
 	return (0);
 }
 

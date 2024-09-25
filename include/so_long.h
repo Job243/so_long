@@ -6,7 +6,7 @@
 /*   By: jmafueni <jmafueni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:23:26 by jmafueni          #+#    #+#             */
-/*   Updated: 2024/09/25 15:04:46 by jmafueni         ###   ########.fr       */
+/*   Updated: 2024/09/25 20:16:00 by jmafueni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@
 # define  ERR_MALLOC -3
 # define SUCCESS 100
 # define FAILURE 1
-# define WIN_WIDTH 800
-# define WIN_HEIGHT 600
 # define TILE_SET 32
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 5
@@ -82,13 +80,14 @@ char	**initialize_tmp_map(t_data *data);
 int	check_map_name(char *s);
 int	check_path(t_data *data);
 int	close_handler(int key, t_data *data);
-int	close_window(t_vars *vars);
+int	exit_game(t_data *data);
 int	count_char(t_data *data);
 int	find_player_position(t_data *data);
 int	game_loop(t_data *data);
-int	handle_keypress(int keysym, t_data *data);
+int	handle_keypress(int keycode, t_data *data);
 int	handle_keyrelease(int keysym, void *vars);
 int	handle_input(int key, t_data *data);
+int	handle_no_event(void);
 int	init_vars(t_data *data);
 int	is_enclosed_in_wall(char **map, int rows, int cols);
 int	line_number(char *file);
@@ -99,11 +98,12 @@ int	print_map(t_data *data);
 int	read_ber(t_data *data, char *ber);
 int	read_map_data(t_data *data, int	line_count);
 int	setup_hook(t_data *data);
-int	so_long(char **map);
+int	so_long(t_data *data);
 int	validate_and_count_lines(t_data *data, char *ber, int *line_count);
 int	validate_map(t_data *data);
 size_t	ft_strlen(const char *str);
 void	floodfill(char **map, int x, int y, t_game *game);
+void	free_vars(t_data *data);
 void	ft_free(char **tab);
 void	move_player(t_data *data, int new_x, int new_y);
 void	print_image(t_data *data, void *img, int x, int y);

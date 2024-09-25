@@ -6,7 +6,7 @@
 /*   By: jmafueni <jmafueni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:57:25 by jmafueni          #+#    #+#             */
-/*   Updated: 2024/09/23 20:31:10 by jmafueni         ###   ########.fr       */
+/*   Updated: 2024/09/25 20:30:19 by jmafueni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,37 +76,22 @@ int	print_map(t_data *data)
 	return (0);
 }
 
-int	so_long(char **map)
+int	so_long(t_data *data)
 {
-	t_data	data;
-	t_vars	vars;
-	t_game	game;
-
-	data.map = map;
-	data.vars = &vars;
-	data.game = &game;
 	// Initialize MLX
-	data.vars->mlx_ptr = mlx_init();
-	if (!data.vars->mlx_ptr)
-	{
-		printf("Error: Failed to initialize MLX\n");
+	data->vars->mlx_ptr = mlx_init();
+	if (!data->vars->mlx_ptr)
 		return (1);
-	}
-
-	// Create a window
-	data.vars->win_ptr = mlx_new_window(data.vars->mlx_ptr, 800, 600, "So Long");
-	if (!data.vars->win_ptr)
-	{
-		printf("Error: Failed to create window\n");
+	data->vars->win_ptr = mlx_new_window(data->vars->mlx_ptr, TILE_SET * data->game->cols, TILE_SET * data->game->rows, "So Long");
+	if (!data->vars->win_ptr)
 		return (1);
-	}
-	file_to_image(&data);
-	if(!print_map(&data) != 0)
-	{
-		printf("Error: Failed to print the map\n");
+	file_to_image(data);
+	if(print_map(data))
 		return (1);
-	}
-	mlx_loop(data.vars->mlx_ptr);
+	mlx_loop_hook(data->vars->mlx_ptr, &handle_no_event, &data->vars);
+	mlx_hook(data->vars->win_ptr, 17, 1L<<17, exit_game, data);
+	mlx_key_hook(data->vars->win_ptr, &handle_keypress, data);
+	mlx_loop(data->vars->mlx_ptr);
 	return (0);
 }
 

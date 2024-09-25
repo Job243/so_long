@@ -6,7 +6,7 @@
 /*   By: jmafueni <jmafueni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:58:05 by jmafueni          #+#    #+#             */
-/*   Updated: 2024/09/23 18:58:12 by jmafueni         ###   ########.fr       */
+/*   Updated: 2024/09/25 18:06:52 by jmafueni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ t_data	*init_game(t_data *data)
         return (NULL);
     }
     printf("Creating window\n");
-    data->vars->win_ptr = mlx_new_window(data->vars->mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "so_long");
+    data->vars->win_ptr = mlx_new_window(data->vars->mlx_ptr, 800, 600, "so_long");
     if (!data->vars->win_ptr)
     {
         printf("Error: mlx_new_window failed\n");
@@ -63,19 +63,7 @@ t_data	*init_game(t_data *data)
     return (data);
 }
 
-int	game_loop(t_data *data)
-{
-	mlx_put_image_to_window(data->vars->mlx_ptr, data->vars->win_ptr, data->img_ptr_player, data->game->player_x, data->game->player_y);
-	return (0);
-}
 
-int	setup_hook(t_data *data)
-{
-	mlx_hook(data->vars->win_ptr, 2, 1L<<0, handle_keypress, data);
-	mlx_hook(data->vars->win_ptr, 17, 1L<<17, close, data);
-	mlx_loop_hook(data->vars->mlx_ptr, game_loop, data);
-	return (0);
-}
 
 // int main(void)
 // {
