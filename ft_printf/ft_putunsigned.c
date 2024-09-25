@@ -1,40 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   ft_putunsigned.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jmafueni <jmafueni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/09 13:16:39 by jmafueni          #+#    #+#             */
-/*   Updated: 2024/09/25 16:30:49 by jmafueni         ###   ########.fr       */
+/*   Created: 2024/01/15 13:47:21 by jmafueni          #+#    #+#             */
+/*   Updated: 2024/01/18 15:48:01 by jmafueni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "ft_printf.h"
 
-void	ft_free(char **tab)
+int	ft_putunsigned(unsigned int n)
 {
-    size_t	i;
+	int	i;
 
 	i = 0;
-	while(tab[i])
+	if (n < 10)
 	{
-		free(tab[i]);
+		ft_putchar(n + 48);
 		i++;
+	}	
+	else
+	{
+		i += ft_putunsigned(n / 10);
+		i += ft_putunsigned(n % 10);
 	}
-	free(tab);
+	return (i);
 }
 
-void	free_vars(t_data *data)
-{
-	if (data->game)
-	{
-		free(data->game);
-		data->game = NULL;
-	}
-	if (data->vars)
-	{
-		free(data->vars);
-		data->vars = NULL;
-	}
-}
+// int main (void)
+// {
+// 	long i;
+// 	i = ft_putunsigned(3);
+// 	printf("%d", i);
+// }

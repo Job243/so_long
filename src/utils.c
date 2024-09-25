@@ -6,55 +6,66 @@
 /*   By: jmafueni <jmafueni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 15:44:35 by jmafueni          #+#    #+#             */
-/*   Updated: 2024/09/25 19:05:38 by jmafueni         ###   ########.fr       */
+/*   Updated: 2024/09/25 22:40:23 by jmafueni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/so_long.h"
+#include "so_long.h"
 #include "get_next_line.h"
 
-int	exit_game(t_data *data)
-{
-	mlx_destroy_image(data->vars->mlx_ptr, data->img_ptr_exit);
-	mlx_destroy_image(data->vars->mlx_ptr, data->img_ptr_floor);
-	mlx_destroy_image(data->vars->mlx_ptr, data->img_ptr_item);
-	mlx_destroy_image(data->vars->mlx_ptr, data->img_ptr_player);
-	mlx_destroy_image(data->vars->mlx_ptr, data->img_ptr_wall);
-	mlx_destroy_window(data->vars->mlx_ptr, data->vars->win_ptr);
-	mlx_destroy_display(data->vars->mlx_ptr);
-	free(data->vars->mlx_ptr);
-	ft_free(data->map);
-	free_vars(data);
-	exit(0);
-}
-
-int	check_map_name(char *s)
+int	is_rectangular(char **map)
 {
 	size_t	len;
+	int		i;
 
-	len = ft_strlen(s);
-	if (s[len] == 'r' && s[len - 1] == 'e'
-		&& s[len - 2] == 'b' && s[len - 3] == '.')
+	if (!map || !map[0])
 		return (0);
+	i = 1;
+	len = ft_strlen(map[0]);
+	while (map[i])
+	{
+		if (ft_strlen(map[i]) != len)
+			return (0);
+		i++;
+	}
 	return (1);
 }
 
-int	game_loop(t_data *data)
+size_t	ft_strlen(const char *str)
 {
-	mlx_put_image_to_window(data->vars->mlx_ptr, data->vars->win_ptr, data->img_ptr_player, data->game->player_x, data->game->player_y);
-	return (0);
+	size_t	i;
+
+	if (!str)
+		return (0);
+	i = 0;
+	while (str[i] != '\0')
+		i++;
+	return (i);
 }
 
-int	setup_hook(t_data *data)
+void	ft_free(char **tab)
 {
-	mlx_hook(data->vars->win_ptr, 2, 1L<<0, handle_keypress, data);
-	mlx_hook(data->vars->win_ptr, 17, 1L<<17, exit_game, data);
-	mlx_loop_hook(data->vars->mlx_ptr, game_loop, data);
-	return (0);
+	size_t	i;
+
+	i = 0;
+	while (tab[i])
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
 }
 
-// int	map_error(char *error, t_data *data)
-// {
-// 	ft_free(char **map);
-// 	return (ft_putstr_fd(err, 1), 0);
-// }
+void	free_vars(t_data *data)
+{
+	if (data->game)
+	{
+		free(data->game);
+		data->game = NULL;
+	}
+	if (data->vars)
+	{
+		free(data->vars);
+		data->vars = NULL;
+	}
+}

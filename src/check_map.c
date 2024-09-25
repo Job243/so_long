@@ -6,65 +6,54 @@
 /*   By: jmafueni <jmafueni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:10:04 by jmafueni          #+#    #+#             */
-/*   Updated: 2024/09/25 20:09:18 by jmafueni         ###   ########.fr       */
+/*   Updated: 2024/09/25 22:13:51 by jmafueni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int	is_rectangular(char **map)
+void	count_elements(t_data *data, int *player_count,
+		int *exit_count, int *collectibles_count)
 {
-	size_t	len;
-	int		i;
+	int	i;
+	int	j;
 
-	if (!map || !map[0])
-		return (0);
-	i = 1;
-	len = ft_strlen(map[0]);
-	while (map[i])
-	{
-		if (ft_strlen(map[i]) != len)
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-int	count_char(t_data *data)
-{
-	int i = 0;
-	int j;
-	int player_count = 0;
-	int exit_count = 0;
-	int collectible_count = 0;
-	// Vérifiez si la structure de jeu est correctement initialisée
-	if (!data || !data->game)
-		return 0; // Erreur
-	// Parcourir chaque ligne de la map
-	while (data->map[i] != NULL)
+	i = 0;
+	while (data->map[i])
 	{
 		j = 0;
-		// Parcourir chaque caractère de la ligne
-		while (data->map[i][j] != '\0')
+		while (data->map[i][j])
 		{
 			if (data->map[i][j] == 'P')
-				player_count++;
+				(*player_count)++;
 			else if (data->map[i][j] == 'E')
-				exit_count++;
+				(*exit_count)++;
 			else if (data->map[i][j] == 'C')
-				collectible_count++;
+				(*collectibles_count)++;
 			j++;
 		}
 		i++;
 	}
-	// Vérification des comptes : 1 joueur, 1 sortie, au moins 1 collectible
+}
+
+int	count_char(t_data *data)
+{
+	int	player_count;
+	int	exit_count;
+	int	collectible_count;
+
+	player_count = 0;
+	exit_count = 0;
+	collectible_count = 0;
+	if (!data || !data->game)
+		return (0);
+	count_elements(data, &player_count, &exit_count, &collectible_count);
 	if (player_count != 1 || exit_count != 1 || collectible_count == 0)
-		return (0); // Erreur : Comptes invalides
-	// Optionnel : stockage dans la structure de jeu
+		return (0);
 	data->game->total_exit = exit_count;
 	data->game->total_player = player_count;
 	data->game->total_item = collectible_count;
-	return (1); // Succès
+	return (1);
 }
 
 int	is_enclosed_in_wall(char **map, int rows, int cols)
@@ -76,14 +65,7 @@ int	is_enclosed_in_wall(char **map, int rows, int cols)
 	i = 0;
 	while (i < cols)
 	{
-		if (map[0][i] != '1')
-			return (0);
-		i++;
-	}
-	i = 0;
-	while (i < cols)
-	{
-		if (map[rows - 1][i] != '1')
+		if (map[0][i] != '1' || map[rows - 1][i] != '1')
 			return (0);
 		i++;
 	}
@@ -100,7 +82,7 @@ int	is_enclosed_in_wall(char **map, int rows, int cols)
 int	validate_char(char **map)
 {
 	int	x;
-	int y;
+	int	y;
 
 	if (!map)
 		return (0);
@@ -136,10 +118,11 @@ int	validate_map(t_data *data)
 	if (!is_enclosed_in_wall(data->map, data->game->rows, data->game->cols))
 		return (map_error("Error : Map is not enclosed. \n", data), 0);
 	if (!count_char(data))
-		return (map_error("Error : Invalid numbers of players, exits or collectibles.\n", data), 0);
+		return (map_error("Error : Invalid numbers of P, E or C.\n", data), 0);
 	if (!validate_char(data->map))
-		return (map_error("Error : Map contains invalid characters.\n", data), 0);
+		return (map_error("Error : Map contains invalid characters.\n"
+				, data), 0);
 	if (!check_path(data))
-		return(map_error("Error : Path not found.\n", data), 0);
+		return (map_error("Error : Path not found.\n", data), 0);
 	return (1);
 }

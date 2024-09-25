@@ -5,19 +5,20 @@ NAME = so_long
 SRC_DIR = src
 INCLUDE_DIR = include
 LIBFT_DIR = libft
+FT_PRINTF_DIR = ft_printf
 MLX_DIR = minilibx-linux
 
 # Les fichiers source
-SRC = $(SRC_DIR)/main.c $(SRC_DIR)/check_map_utils.c $(SRC_DIR)/utils.c $(SRC_DIR)/free.c \
+SRC = $(SRC_DIR)/main.c $(SRC_DIR)/check_map_utils.c $(SRC_DIR)/utils.c \
 		$(SRC_DIR)/moves.c $(SRC_DIR)/event.c $(SRC_DIR)/create_map.c \
 		$(SRC_DIR)/get_next_line.c $(SRC_DIR)/get_next_line_utils.c \
-		$(SRC_DIR)/map.c $(SRC_DIR)/check_map.c
+		$(SRC_DIR)/check_map.c
 
 # Les fichiers objets générés à partir des sources
 OBJ = $(SRC:.c=.o)
 
 # Les options du compilateur (-I pour inclure les chemins vers les headers)
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3 -I$(INCLUDE_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3 -I$(INCLUDE_DIR) -I$(LIBFT_DIR) -I$(FT_PRINTF_DIR) -I$(MLX_DIR)
 
 # Commande du compilateur
 CC = gcc
@@ -27,7 +28,7 @@ all: $(NAME)
 
 # Générer l'exécutable en liant les fichiers objets
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) -L$(LIBFT_DIR) -lft -L$(MLX_DIR) -lmlx -lXext -lX11 -lm
+	$(CC) $(CFLAGS) -no-pie -o $(NAME) $(OBJ) -L$(LIBFT_DIR) -lft -L$(FT_PRINTF_DIR) -lftprintf -L$(MLX_DIR) -lmlx -lXext -lX11 -lm
 
 # Générer les fichiers objets à partir des fichiers sources
 $(SRC_DIR)/%.o: $(SRC_DIR)/%.c

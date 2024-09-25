@@ -23,7 +23,7 @@ NAME = libft.a
 
 CC = cc
 
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g3 -fPIC
 
 .c.o:
 	${CC} ${CFLAGS} -c $< -o ${<:.c=.o}

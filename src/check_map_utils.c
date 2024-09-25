@@ -6,11 +6,22 @@
 /*   By: jmafueni <jmafueni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:03:29 by jmafueni          #+#    #+#             */
-/*   Updated: 2024/09/23 18:59:07 by jmafueni         ###   ########.fr       */
+/*   Updated: 2024/09/25 22:14:48 by jmafueni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
+
+int	check_map_name(char *s)
+{
+	size_t	len;
+
+	len = ft_strlen(s);
+	if (s[len] == 'r' && s[len - 1] == 'e'
+		&& s[len - 2] == 'b' && s[len - 3] == '.')
+		return (0);
+	return (1);
+}
 
 void	floodfill(char **map, int x, int y, t_game *game)
 {
@@ -18,15 +29,14 @@ void	floodfill(char **map, int x, int y, t_game *game)
 		x >= (int)strlen(map[y]) || map[y][x] == '1' || map[y][x] == 'V')
 		return ;
 	if (map[y][x] == 'E')
-		{
-			game->found_exit = 1;
-			return ;
-		}
+	{
+		game->found_exit = 1;
+		return ;
+	}
 	if (map[y][x] == 'C')
 		game->found_item++;
 	if (map[y][x] != 'P')
 		map[y][x] = 'V';
-
 	floodfill(map, x + 1, y, game);
 	floodfill(map, x - 1, y, game);
 	floodfill(map, x, y + 1, game);
@@ -93,5 +103,6 @@ int	check_path(t_data *data)
 		return (0);
 	floodfill(tmp_map, data->game->player_x, data->game->player_y, data->game);
 	ft_free(tmp_map);
-	return (data->game->found_exit == 1 && data->game->found_item == data->game->total_item);
+	return (data->game->found_exit == 1
+		&& data->game->found_item == data->game->total_item);
 }

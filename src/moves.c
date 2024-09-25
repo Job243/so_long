@@ -6,11 +6,12 @@
 /*   By: jmafueni <jmafueni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:56:55 by jmafueni          #+#    #+#             */
-/*   Updated: 2024/09/25 20:31:28 by jmafueni         ###   ########.fr       */
+/*   Updated: 2024/09/25 22:39:48 by jmafueni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
+#include "../ft_printf/ft_printf.h"
 
 void	move_player(t_data *data, int new_x, int new_y)
 {
@@ -20,6 +21,7 @@ void	move_player(t_data *data, int new_x, int new_y)
 		data->game->player_x = new_x;
 		data->game->player_y = new_y;
 		data->game->move_count++;
+		ft_printf("Move count: %d\n", data->game->move_count);
 		print_map(data);
 	}
 }
@@ -45,19 +47,41 @@ int	move_check(t_data *data, int x, int y)
 	return (0);
 }
 
-
-
 int	handle_keypress(int keycode, t_data *data)
 {
-	if (keycode == 65307)	// Echappe pour quitter
+	if (keycode == 65307)
 		exit_game(data);
-	else if (keycode == 119 || keycode == 65362)	// Haut (W ou fleche du haut)
+	else if (keycode == 119 || keycode == 65362)
 		move_player(data, data->game->player_x, data->game->player_y - 1);
-	else if (keycode == 97 || keycode == 65361)		// Gauche (A ou flechde de gauche)
+	else if (keycode == 97 || keycode == 65361)
 		move_player(data, data->game->player_x - 1, data->game->player_y);
-	else if (keycode == 115 || keycode == 65364)	// Bas (S ou fleche du bas)
+	else if (keycode == 115 || keycode == 65364)
 		move_player(data, data->game->player_x, data->game->player_y + 1);
-	else if (keycode == 100 || keycode == 65363)	// Droite (D ou fleche de droite)
+	else if (keycode == 100 || keycode == 65363)
 		move_player(data, data->game->player_x + 1, data->game->player_y);
+	return (0);
+}
+
+int	main(int ac, char **av)
+{
+	t_data	data;
+
+	if (ac != 2)
+	{
+		ft_putstr_fd("Usage: ./program <map_file.ber>\n", 1);
+		return (1);
+	}
+	if (!read_ber(&data, av[1]))
+	{
+		ft_putstr_fd("Failed to read map file.\n", 1);
+		return (1);
+	}
+	if (!validate_map(&data))
+	{
+		map_error("Error: Invalid map\n", &data);
+		free_vars(&data);
+		return (1);
+	}
+	so_long(&data);
 	return (0);
 }

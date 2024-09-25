@@ -6,7 +6,7 @@
 /*   By: jmafueni <jmafueni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 16:35:58 by jmafueni          #+#    #+#             */
-/*   Updated: 2024/04/05 14:33:32 by jmafueni         ###   ########.fr       */
+/*   Updated: 2024/09/25 21:42:33 by jmafueni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #  define BUFFER_SIZE 5
 # endif
 
+# include "../libft/libft.h"
 # include <ctype.h>
 # include <fcntl.h>
 # include <unistd.h>
@@ -23,7 +24,6 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <string.h>
-#include "../libft/libft.h"
 # define  ERR_MALLOC -3
 # define SUCCESS 100
 
