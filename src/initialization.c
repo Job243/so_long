@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   event.c                                             :+:      :+:    :+:   */
+/*   initialization.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jmafueni <jmafueni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/09 13:16:39 by jmafueni          #+#    #+#             */
-/*   Updated: 2024/08/09 13:37:01 by jmafueni         ###   ########.fr       */
+/*   Created: 2024/09/23 18:58:05 by jmafueni          #+#    #+#             */
+/*   Updated: 2024/09/23 18:58:12 by jmafueni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	setup_hook(t_data *data)
 // int main(void)
 // {
 // 	t_data data;
-	
+
 // 	// Initialisation de MLX
 // 	data.vars = malloc(sizeof(t_vars));
 // 	if (!data.vars)
@@ -88,7 +88,7 @@ int	setup_hook(t_data *data)
 // 		perror("Failed to allocate memory for variables");
 // 		return (1);
 // 	}
-	
+
 // 	data.vars->mlx_ptr = mlx_init();
 // 	if (!data.vars->mlx_ptr)
 // 	{
@@ -107,7 +107,7 @@ int	setup_hook(t_data *data)
 // 	data.img_ptr_player = mlx_xpm_file_to_image(data.vars->mlx_ptr, "path/to/player.xpm", &data.width, &data.height);
 // 	data.img_ptr_item = mlx_xpm_file_to_image(data.vars->mlx_ptr, "path/to/item.xpm", &data.width, &data.height);
 // 	data.img_ptr_exit = mlx_xpm_file_to_image(data.vars->mlx_ptr, "path/to/exit.xpm", &data.width, &data.height);
-	
+
 // 	// Vérifiez que toutes les images ont été chargées
 // 	if (!data.img_ptr_wall || !data.img_ptr_floor ||
 // 	!data.img_ptr_player || !data.img_ptr_item || !data.img_ptr_exit)

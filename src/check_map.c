@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_map_2.c                                      :+:      :+:    :+:   */
+/*   check_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jmafueni <jmafueni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:10:04 by jmafueni          #+#    #+#             */
-/*   Updated: 2024/08/09 15:52:55 by jmafueni         ###   ########.fr       */
+/*   Updated: 2024/09/25 15:40:28 by jmafueni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	is_rectangular(char **map)
 {
-	int	len;
-	int	i;
+	size_t	len;
+	int		i;
 
 	if (!map || !map[0])
 		return (0);
@@ -32,31 +32,93 @@ int	is_rectangular(char **map)
 
 int	count_char(t_data *data)
 {
-	int	x;
-	int	y;
+	int i = 0;
+	int j;
+	int player_count = 0;
+	int exit_count = 0;
+	int collectible_count = 0;
 
-	data->game->total_item = 0;
-	data->game->total_player = 0;
-	data->game->total_exit = 0;
-	y = 0;
-	while (data->map[y])
+	// Vérifiez si la structure de jeu est correctement initialisée
+	if (!data || !data->game)
 	{
-		x = 0;
-		while (data->map[y][x])
-		{
-			if (data->map[y][x] == 'P')
-				data->game->total_player++;
-			else if (data->map[y][x] == 'E')
-				data->game->total_exit++;
-			else if (data->map[y][x] == 'C')
-				data->game->total_item++;
-			x++;
+		ft_putstr_fd("Error: Data or game structure is not initialized.\n", 2);
+		return 0; // Erreur
 		}
-		y++;
+	// Parcourir chaque ligne de la map
+	while (data->map[i] != NULL)
+	{
+		j = 0;
+		// Parcourir chaque caractère de la ligne
+		while (data->map[i][j] != '\0')
+		{
+			if (data->map[i][j] == 'P')
+				player_count++;
+			else if (data->map[i][j] == 'E')
+				exit_count++;
+			else if (data->map[i][j] == 'C')
+				collectible_count++;
+			j++;
+		}
+		i++;
 	}
-	return (data->game->total_exit == 1 && data->game->total_player == 1
-			&& data->game->total_item > 0);
+	// Debug: Vérifiez les compteurs
+    printf("Player count: %d, Exit count: %d, Collectible count: %d\n", player_count, exit_count, collectible_count);
+	// Vérification des comptes : 1 joueur, 1 sortie, au moins 1 collectible
+	if (player_count != 1 || exit_count != 1 || collectible_count == 0)
+	{
+		return (0); // Erreur : Comptes invalides
+	}
+	// Optionnel : stockage dans la structure de jeu
+
+	data->game->total_exit = exit_count;
+	data->game->total_player = player_count;
+	data->game->total_item = collectible_count;
+	return (1); // Succès
+	// int	x;
+	// int	y;
+
+	// if(!data->game)
+	// {
+	// 	ft_putstr_fd("Error: Game strructure is not initialize.\n", 2);
+	// 	return (0);
+	// }
+	// data->game->total_item = 0;
+	// data->game->total_player = 0;
+	// data->game->total_exit = 0;
+	// y = 0;
+	// while (data->map[y])
+	// {
+	// 	x = 0;
+	// 	// Debug print for current row being processed
+	// 	printf("Processing row %d: %s\n", y, data->map[y]);
+	// 	while (data->map[y][x])
+	// 	{
+	// 		// Debug print for each character being checked
+	// 		printf("Checking character: %c at position [%d][%d]\n", data->map[y][x], y, x);
+	// 		if (data->map[y][x] == 'P')
+	// 			data->game->total_player++;
+	// 		else if (data->map[y][x] == 'E')
+	// 			data->game->total_exit++;
+	// 		else if (data->map[y][x] == 'C')
+	// 			data->game->total_item++;
+	// 		x++;
+	// 	}
+	// 	y++;
+	// }
+	// return (data->game->total_exit == 1 && data->game->total_player == 1
+	// 		&& data->game->total_item > 0);
 }
+
+void print_ber(char **map)
+{
+	int i = 0;
+	while (map[i])
+	{
+		printf("%s\n", map[i]);
+		i++;
+	}
+}
+
 
 int	is_enclosed_in_wall(char **map, int rows, int cols)
 {
@@ -65,19 +127,48 @@ int	is_enclosed_in_wall(char **map, int rows, int cols)
 	if (!map || rows < 1 || cols < 1)
 		return (0);
 	i = 0;
+	printf("Checking map enclosure...\n");
+	printf("Rows: %d, Cols: %d\n", rows, cols);
 	while (i < cols)
 	{
-		if (map[0][i] != '1' || map[rows - 1][i] != '1')
+		// if (map[0][i] != '1')
+		// 	return (0);
+		// i++;
+		if (map[0][i] != '1')
+		{
+			printf("Top wall error at column: %d\n", i);
 			return (0);
+		}
 		i++;
 	}
 	i = 0;
-	while (i < rows)
+	while (i < cols)
 	{
-		if (map[i][0] != '1' || map[i][cols - 1] != '1')
+		// if (map[rows - 1][i] != '1')
+		// 	return (0);
+		// i++;
+		if (map[rows - 1][i] != '1')
+		{
+			printf("Bottom wall error at column: %d\n", i);
 			return (0);
+		}
 		i++;
 	}
+	i = 1;
+	while (i < rows - 1)
+	{
+		// if (map[i][0] != '1' || map[i][cols - 1] != '1')
+		// 	return (0);
+		// i++;
+		if (map[i][0] != '1' || map[i][cols - 1] != '1')
+		{
+			printf("Side wall error at row: %d, col0: %c, colN: %c\n", i, map[i][0], map[i][cols - 1]);
+			return (0);
+		}
+		i++;
+	}
+	printf("Map contents:\n");
+	print_ber(map);
 	return (1);
 }
 
@@ -108,11 +199,13 @@ int	validate_map(t_data *data)
 {
 	int	cols;
 	int	rows;
-	
+
 	rows = 0;
 	while (data->map[rows])
 		rows++;
 	cols = ft_strlen(data->map[0]);
+	printf("Validating map...\n");
+	printf("Rows: %d, Cols: %d\n", rows, cols);
 	if (!is_rectangular(data->map))
 		return (map_error("Error: Map is not rectangular.\n", data), 0);
 	if (!is_enclosed_in_wall(data->map, rows, cols))

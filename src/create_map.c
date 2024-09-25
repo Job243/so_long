@@ -1,25 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   create_map.c                                             :+:      :+:    :+:   */
+/*   create_map.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jmafueni <jmafueni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/09 13:16:39 by jmafueni          #+#    #+#             */
-/*   Updated: 2024/08/09 13:37:01 by jmafueni         ###   ########.fr       */
+/*   Created: 2024/09/23 18:58:45 by jmafueni          #+#    #+#             */
+/*   Updated: 2024/09/25 16:22:55 by jmafueni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-int	init_var(t_data *data)
+int	init_vars(t_data *data)
 {
+	t_game	*tmp_game;
+	t_vars	*tmp_vars;
+
+	tmp_game = (t_game *)malloc(sizeof(t_game));
+	data->game = tmp_game;
+	if (!data->game)
+	{
+		ft_putstr_fd("Error: game structure is NULL\n", 2);
+		return (0);
+	}
 	data->game->player_x = 0;
 	data->game->player_y = 0;
 	data->game->move_count = 0;
 	data->game->item_collected = 0;
+	data->game->total_player = 0;
+	data->game->total_exit = 0;
+	data->game->total_item = 0;
 	data->fd = 0;
-	data->vars->mlx_ptr = NULL;
+	tmp_vars = (t_vars *)malloc(sizeof(t_vars));
+	data->vars = tmp_vars;
+	if (!data->vars)
+	{
+		ft_putstr_fd("Error: vars struture is NULL\n", 2);
+		return (0);
+	}
+	// data->vars->mlx_ptr = NULL;
 	return (1);
 }
 
@@ -42,27 +62,21 @@ int	line_number(char *file)
 	return (count_line);
 }
 
-int	read_ber(t_data *data, char *ber)
+int	validate_and_count_lines(t_data *data, char *ber, int *line_count)
 {
-	int		i;
-	int		line_count;
-	char	*line;
-
 	// Vérifier l'extension du fichier
 	if (!check_map_name(ber))
 	{
 		ft_putstr_fd("Error: Wrong file extension\n", 2);
 		return (0);
 	}
-
 	// Compter le nombre de lignes
-	line_count = line_number(ber);
-	if (line_count <= 0)
+	*line_count = line_number(ber);
+	if (*line_count <= 0)
 	{
 		ft_putstr_fd("Error: File does not exist or is empty\n", 2);
 		return (0);
 	}
-
 	// Ouvrir le fichier et allouer la mémoire pour le tableau de lignes
 	data->fd = open(ber, O_RDONLY);
 	if (data->fd < 0)
@@ -70,7 +84,15 @@ int	read_ber(t_data *data, char *ber)
 		ft_putstr_fd("Error: Failed to open file\n", 2);
 		return (0);
 	}
+	return (1);
+}
 
+int	read_map_data(t_data *data, int	line_count)
+{
+	int		i;
+	char	*line;
+
+	// Allocate memory for the map
 	data->map = ft_calloc(line_count + 1, sizeof(char *));
 	if (!data->map)
 	{
@@ -78,27 +100,73 @@ int	read_ber(t_data *data, char *ber)
 		ft_putstr_fd("Error: Memory allocation failed\n", 2);
 		return (0);
 	}
-
 	// Lire le fichier ligne par ligne
 	i = 0;
 	while ((line = get_next_line(data->fd)) != NULL)
 	{
-		data->map[i] = line;
-		i++;
+		if (line)
+		{
+			data->map[i] = ft_strtrim(line, " \n");
+			free(line);
+			i++;
+		}
 	}
 	close(data->fd);
-
 	// Vérifier si toutes les lignes ont été lues correctement
 	if (i != line_count)
-		return (ft_putstr_fd("Error!\nMismatch in line count\n", 1), 0);
-
-	// Initialiser les variables du jeu
-	if (!init_var(data))
+	{
+		ft_putstr_fd("Error!\nMismatch in line count\n", 1);
+		map_error(NULL, data);
 		return (0);
-
+	}
 	return (1);
 }
 
+int	read_ber(t_data *data, char *ber)
+{
+	int	line_count;
+
+	line_count = 0;
+	if (!validate_and_count_lines(data, ber, &line_count))
+		return (0);
+	if (!read_map_data(data, line_count))
+		return (0);
+	if (!init_vars(data))
+	{
+		map_error(NULL, data);
+		return (0);
+	}
+	return (1);
+}
+
+// int	main(int ac, char **av)
+// {
+// 	t_data data;
+
+// 	if (ac != 2)
+// 	{
+// 		ft_putstr_fd("Usage: ./so_long <map.ber>\n", 2);
+// 		return (1);
+// 	}
+// 	// if (!init_vars(&data))
+// 	// {
+// 	// 	ft_putstr_fd("Error: Failed to initialize variables\n", 2);
+// 	// 	return (1);
+// 	// }
+// 	if (!read_ber(&data,av[1]))
+// 	{
+// 		ft_putstr_fd("Error: Map parsing failed\n", 2);
+// 		return (1);
+// 	}
+// 	if (!validate_map(&data))
+// 	{
+// 		map_error("Error: Invalid map\n", &data);
+// 		return (1);
+// 	}
+// 	printf("Map loaded successfully\n");
+// 	map_error(NULL, &data);
+// 	return (0);
+// }
 
 // int	read_ber(t_data *data, char *ber)
 // {
@@ -127,36 +195,32 @@ int	read_ber(t_data *data, char *ber)
 // }
 
 
-/*int main(int argc, char **argv)
+int main(int argc, char **argv)
 {
-    t_data data;
+	t_data data;
+	// Vérifier que le bon nombre d'arguments est passé
+	if (argc != 2)
+	{
+		ft_putstr_fd("Usage: ./program <map_file.ber>\n", 1);
+		return (1);
+	}
+	// Lire le fichier .ber et initialiser les données
+	if (!read_ber(&data, argv[1]))
+	{
+		ft_putstr_fd("Failed to read map file.\n", 1);
+		return (1);
+	}
+	if (!validate_map(&data))
+	{
+		map_error("Error: Invalid map\n", &data);
+		return (1);
+	}
+	printf("Map loaded successfully\n");
+	map_error(NULL, &data);
+	// Afficher la map pour vérification
 
-    // Vérifier que le bon nombre d'arguments est passé
-    if (argc != 2)
-    {
-        ft_putstr_fd("Usage: ./program <map_file.ber>\n", 1);
-        return (1);
-    }
-
-    // Lire le fichier .ber et initialiser les données
-    if (!read_ber(&data, argv[1]))
-    {
-        ft_putstr_fd("Failed to read map file.\n", 1);
-        return (1);
-    }
-
-    // Afficher la map pour vérification
-    int i = 0;
-    while (data.map[i])
-    {
-        printf("%s", data.map[i]); // Les lignes de la carte sont déjà terminées par un '\n' grâce à get_next_line
-        free(data.map[i]); // Libérer chaque ligne après l'affichage
-        i++;
-    }
-
-    free(data.map); // Libérer le tableau de la carte
-    return (0);
-}*/
+	return (0);
+}
 
 /*int	file_exists(const char *filename)
 {

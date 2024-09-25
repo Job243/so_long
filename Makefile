@@ -11,13 +11,13 @@ MLX_DIR = minilibx-linux
 SRC = $(SRC_DIR)/main.c $(SRC_DIR)/check_map_utils.c $(SRC_DIR)/utils.c $(SRC_DIR)/free.c \
 		$(SRC_DIR)/initialization.c $(SRC_DIR)/event.c $(SRC_DIR)/create_map.c \
 		$(SRC_DIR)/get_next_line.c $(SRC_DIR)/get_next_line_utils.c \
-		$(SRC_DIR)/map.c
+		$(SRC_DIR)/map.c $(SRC_DIR)/check_map.c
 
 # Les fichiers objets générés à partir des sources
 OBJ = $(SRC:.c=.o)
 
 # Les options du compilateur (-I pour inclure les chemins vers les headers)
-CFLAGS = -Wall -Wextra -Werror -g3 -I$(INCLUDE_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
+CFLAGS = -Wall -Wextra -Werror -I$(INCLUDE_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
 
 # Commande du compilateur
 CC = gcc

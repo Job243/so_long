@@ -1,26 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map.c                                             :+:      :+:    :+:   */
+/*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jmafueni <jmafueni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/09 13:16:39 by jmafueni          #+#    #+#             */
-/*   Updated: 2024/08/09 13:37:01 by jmafueni         ###   ########.fr       */
+/*   Created: 2024/09/23 18:57:25 by jmafueni          #+#    #+#             */
+/*   Updated: 2024/09/23 20:31:10 by jmafueni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/so_long.h"
+#include "so_long.h"
 
-/*void	file_to_image(t_data *data)
+void	file_to_image(t_data *data)
 {
-	data->path_floor = ;
-	data->path_wall = ;
-	data->path_player = ;
-	data->path_item = ;
-	data->path_exit = ;
-	data->img_ptr_floor = mlx_xpm_file_to_image(data->vars->mlx_ptr)
-}*/
+	int	width;
+	int	height;
+
+	data->path_floor = "images/floor_image.xpm";
+	data->path_wall = "images/wall_image.xpm";
+	data->path_player = "images/player_image.xpm";
+	data->path_item = "images/collectibles_image.xpm";
+	data->path_exit = "images/exit_image.xpm";
+
+	data->img_ptr_floor = mlx_xpm_file_to_image(data->vars->mlx_ptr, data->path_floor, &width, &height);
+	data->img_ptr_wall = mlx_xpm_file_to_image(data->vars->mlx_ptr, data->path_wall, &width, &height);
+	data->img_ptr_player = mlx_xpm_file_to_image(data->vars->mlx_ptr, data->path_player, &width, &height);
+	data->img_ptr_item = mlx_xpm_file_to_image(data->vars->mlx_ptr, data->path_item, &width, &height);
+	data->img_ptr_exit = mlx_xpm_file_to_image(data->vars->mlx_ptr, data->path_exit, &width, &height);
+
+	if (!data->img_ptr_floor || !data->img_ptr_wall || !data->img_ptr_player
+		|| !data->img_ptr_item || !data->img_ptr_exit)
+	{
+		printf("Error: One or more images failed to load\n");
+		exit(0);
+	}
+}
 
 void	print_image(t_data *data, void *img, int x, int y)
 {
@@ -71,50 +86,21 @@ int	so_long(char **map)
 	data.vars = &vars;
 	data.game = &game;
 	// Initialize MLX
-    data.vars->mlx_ptr = mlx_init();
-    if (!data.vars->mlx_ptr)
-    {
-        printf("Error: Failed to initialize MLX\n");
-        return (1);
-    }
-
-    // Create a window
-    data.vars->win_ptr = mlx_new_window(data.vars->mlx_ptr, 800, 600, "So Long");
-    if (!data.vars->win_ptr)
-    {
-        printf("Error: Failed to create window\n");
-        return (1);
-    }
-
-
-	data.path_wall = "../images/wall_image.xpm";
-	data.path_floor = "../images/floor_image.xpm";
-	data.path_player = "../images/player_image.xpm";
-	data.path_item = "../images/item_image.xpm";
-	data.path_exit = "../images/exit_image.xpm";
-	data.img_ptr_test = mlx_xpm_file_to_image(data.vars->mlx_ptr, "path/to/test_image.xpm", &data.width, &data.height);
-	if (!data.img_ptr_test)
-		printf("Failed to load test image from: %s\n", "path/to/test_image.xpm");
-	data.img_ptr_wall = mlx_xpm_file_to_image(data.vars->mlx_ptr, data.path_wall, &data.width, &data.height);
-	if (!data.img_ptr_wall)
-		printf("Failed to load wall image from: %s\n", data.path_wall);
-	data.img_ptr_floor = mlx_xpm_file_to_image(data.vars->mlx_ptr, data.path_floor, &data.width, &data.height);
-	if (!data.img_ptr_floor)
-		printf("Failed to load floor image from: %s\n", data.path_floor);
-	data.img_ptr_player = mlx_xpm_file_to_image(data.vars->mlx_ptr, data.path_player, &data.width, &data.height);
-	if (!data.img_ptr_player)
-		printf("Failed to load player image from: %s\n", data.path_player);
-	data.img_ptr_item = mlx_xpm_file_to_image(data.vars->mlx_ptr, data.path_item, &data.width, &data.height);
-	if (!data.img_ptr_item)
-		printf("Failed to load item image from: %s\n", data.path_item);
-	data.img_ptr_exit = mlx_xpm_file_to_image(data.vars->mlx_ptr, data.path_exit, &data.width, &data.height);
-	if (!data.img_ptr_exit)
-		printf("Failed to load exit image from: %s\n", data.path_exit);
-	if (!data.img_ptr_wall || !data.img_ptr_floor || !data.img_ptr_player || !data.img_ptr_item || !data.img_ptr_exit)
+	data.vars->mlx_ptr = mlx_init();
+	if (!data.vars->mlx_ptr)
 	{
-		printf("Error: One or more images failed to load\n");
+		printf("Error: Failed to initialize MLX\n");
 		return (1);
 	}
+
+	// Create a window
+	data.vars->win_ptr = mlx_new_window(data.vars->mlx_ptr, 800, 600, "So Long");
+	if (!data.vars->win_ptr)
+	{
+		printf("Error: Failed to create window\n");
+		return (1);
+	}
+	file_to_image(&data);
 	if(!print_map(&data) != 0)
 	{
 		printf("Error: Failed to print the map\n");
@@ -124,39 +110,56 @@ int	so_long(char **map)
 	return (0);
 }
 
-/*int main()
-{
-    void *mlx;
-    void *win;
-    void *img;
-    int width, height;
+// int main(void)
+// {
+// 	int		i;
+// 	t_data	data;
 
-    mlx = mlx_init();
-    if (!mlx)
-    {
-        printf("Failed to initialize MLX\n");
-        return 1;
-    }
-
-    win = mlx_new_window(mlx, 800, 600, "Test Window");
-    if (!win)
-    {
-        printf("Failed to create window\n");
-        return 1;
-    }
-
-    img = mlx_xpm_file_to_image(mlx, "path/to/test_image.xpm", &width, &height);
-    if (!img)
-    {
-        printf("Failed to load image from: path/to/test_image.xpm\n");
-        return 1;
-    }
-
-    mlx_put_image_to_window(mlx, win, img, 0, 0);
-    mlx_loop(mlx);
-
-    return 0;
-}*/
+// 	data.vars = malloc(sizeof(t_vars));
+// 	if (!data.vars)
+// 	{
+// 		printf("Error: Failed to allocate memory for variables\n");
+// 		return (1);
+// 	}
+// 	// Initialize
+// 	data.vars->mlx_ptr = mlx_init();
+// 	if (!data.vars->mlx_ptr)
+// 	{
+// 		printf("Error: Failed to initialize MLX\n");
+// 		free(data.vars);
+// 		return (1);
+// 	}
+// 	// Create a window
+// 	data.vars->win_ptr = mlx_new_window(data.vars->mlx_ptr, WIN_WIDTH, WIN_HEIGHT, "So_long");
+// 	if (!data.vars->win_ptr)
+// 	{
+// 		printf("Error: Failed to create a window\n");
+// 		free(data.vars);
+// 		return (1);
+// 	}
+// 	data.map = create_sample_map();
+// 	if(!data.map)
+// 	{
+// 		printf("Error: Failed to create sample map\n");
+// 		mlx_destroy_window(data.vars->mlx_ptr, data.vars->win_ptr);
+// 		free(data.vars);
+// 		return (1);
+// 	}
+// 	file_to_image(&data);
+// 	print_map(&data);
+// 	while (1)
+// 		mlx_loop(data.vars->mlx_ptr);
+// 	i = 0;
+// 	while (data.map[i])
+// 	{
+// 		free(data.map[i]);
+// 		i++;
+// 	}
+// 	free(data.map);
+// 	mlx_destroy_window(data.vars->mlx_ptr, data.vars->win_ptr);
+// 	free(data.vars);
+// 	return (0);
+// }
 
 
 // int main(void)
