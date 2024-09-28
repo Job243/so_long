@@ -6,11 +6,11 @@
 /*   By: jmafueni <jmafueni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 18:58:45 by jmafueni          #+#    #+#             */
-/*   Updated: 2024/09/25 22:37:48 by jmafueni         ###   ########.fr       */
+/*   Updated: 2024/09/26 21:55:29 by jmafueni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../include/so_long.h"
 
 int	init_vars(t_data *data)
 {
@@ -18,9 +18,9 @@ int	init_vars(t_data *data)
 	t_vars	*tmp_vars;
 
 	tmp_game = (t_game *)malloc(sizeof(t_game));
+	if (!tmp_game)
+		return (exit_game(data), 0);
 	data->game = tmp_game;
-	if (!data->game)
-		return (0);
 	data->game->player_x = 0;
 	data->game->player_y = 0;
 	data->game->move_count = 0;
@@ -30,9 +30,9 @@ int	init_vars(t_data *data)
 	data->game->total_item = 0;
 	data->fd = 0;
 	tmp_vars = (t_vars *)malloc(sizeof(t_vars));
+	if (!tmp_vars)
+		return (exit_game(data), 0);
 	data->vars = tmp_vars;
-	if (!data->vars)
-		return (0);
 	return (1);
 }
 
@@ -101,7 +101,7 @@ int	read_map_data(t_data *data, int line_count)
 	if (i != line_count)
 	{
 		map_error(NULL, data);
-		return (0);
+		return (close(data->fd), 0);
 	}
 	return (1);
 }
@@ -116,9 +116,6 @@ int	read_ber(t_data *data, char *ber)
 	if (!read_map_data(data, line_count))
 		return (0);
 	if (!init_vars(data))
-	{
-		map_error(NULL, data);
-		return (0);
-	}
+		return (free_vars(data), 0);
 	return (1);
 }

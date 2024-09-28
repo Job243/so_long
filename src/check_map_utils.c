@@ -6,21 +6,21 @@
 /*   By: jmafueni <jmafueni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:03:29 by jmafueni          #+#    #+#             */
-/*   Updated: 2024/09/25 22:14:48 by jmafueni         ###   ########.fr       */
+/*   Updated: 2024/09/27 16:53:13 by jmafueni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../include/so_long.h"
 
 int	check_map_name(char *s)
 {
 	size_t	len;
 
 	len = ft_strlen(s);
-	if (s[len] == 'r' && s[len - 1] == 'e'
-		&& s[len - 2] == 'b' && s[len - 3] == '.')
-		return (0);
-	return (1);
+	if (len >= 4 && s[len - 4] == '.' && s[len - 3] == 'b'
+		&& s[len - 2] == 'e' && s[len - 1] == 'r')
+		return (1);
+	return (0);
 }
 
 void	floodfill(char **map, int x, int y, t_game *game)

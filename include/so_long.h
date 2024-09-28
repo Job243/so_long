@@ -6,7 +6,7 @@
 /*   By: jmafueni <jmafueni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:23:26 by jmafueni          #+#    #+#             */
-/*   Updated: 2024/09/25 22:51:05 by jmafueni         ###   ########.fr       */
+/*   Updated: 2024/09/27 16:39:32 by jmafueni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,8 @@ int		validate_map(t_data *data);
 size_t	ft_strlen(const char *str);
 void	count_elements(t_data *data, int *player_count,
 			int *exit_count, int *collectibles_count);
+void	file_to_image(t_data *data);
+void	free_images(t_data *data);
 void	floodfill(char **map, int x, int y, t_game *game);
 void	free_vars(t_data *data);
 void	ft_free(char **tab);

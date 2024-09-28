@@ -6,141 +6,111 @@
 /*   By: jmafueni <jmafueni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/31 13:09:11 by jmafueni          #+#    #+#             */
-/*   Updated: 2024/04/05 16:41:05 by jmafueni         ###   ########.fr       */
+/*   Updated: 2024/09/26 15:55:11 by jmafueni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "../include/get_next_line.h"
+
+/*
+ * Polish linked list for next call
+ */
+void	polish_list(t_list **list)
+{
+	t_list	*last_node;
+	t_list	*clean_node;
+	int		i;
+	int		k;
+	char	*buf;
+
+	buf = malloc(BUFFER_SIZE + 1);
+	clean_node = malloc(sizeof(t_list));
+	if (NULL == buf || NULL == clean_node)
+		return ;
+	last_node = find_last_node(*list);
+	i = 0;
+	k = 0;
+	while (last_node->content[i] && last_node->content[i] != '\n')
+		++i;
+	while (last_node->content[i] && last_node->content[++i])
+		buf[k++] = last_node->content[i];
+	buf[k] = '\0';
+	clean_node->content = buf;
+	clean_node->next = NULL;
+	dealloc(list, clean_node, buf);
+}
+
+/*
+ * Get my (line\n]
+ */
+char	*get_line(t_list *list)
+{
+	int		str_len;
+	char	*next_str;
+
+	if (NULL == list)
+		return (NULL);
+	str_len = len_to_newline(list);
+	next_str = malloc(str_len + 1);
+	if (NULL == next_str)
+		return (NULL);
+	copy_str(list, next_str);
+	return (next_str);
+}
+
+/*
+ * append one node
+ * to the end of list
+ */
+void	append(t_list **list, char *buf)
+{
+	t_list	*new_node;
+	t_list	*last_node;
+
+	last_node = find_last_node(*list);
+	new_node = malloc(sizeof(t_list));
+	if (NULL == new_node)
+		return ;
+	if (NULL == last_node)
+		*list = new_node;
+	else
+		last_node->next = new_node;
+	new_node->content = buf;
+	new_node->next = NULL;
+}
+
+void	create_list(t_list **list, int fd)
+{
+	int		char_read;
+	char	*buf;
+
+	while (!found_newline(*list))
+	{
+		buf = malloc(BUFFER_SIZE + 1);
+		if (NULL == buf)
+			return ;
+		char_read = read(fd, buf, BUFFER_SIZE);
+		if (!char_read)
+		{
+			free(buf);
+			return ;
+		}
+		buf[char_read] = '\0';
+		append(list, buf);
+	}
+}
 
 char	*get_next_line(int fd)
 {
-	static t_list	*stash = NULL;
-	char			*line;
+	static t_list	*list = NULL;
+	char			*next_line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &next_line, 0) < 0)
 		return (NULL);
-	line = NULL;
-	read_to_stash(&stash, fd);
-	if (!stash)
+	create_list(&list, fd);
+	if (list == NULL)
 		return (NULL);
-	if (extract_line(stash, &line) == ERR_MALLOC)
-		return (NULL);
-	clean_stash(&stash);
-	if (line[0] == '\0')
-	{
-		free_stash(&stash);
-		stash = NULL;
-		free(line);
-		return (NULL);
-	}
-	return (line);
-}
-
-int	read_to_stash(t_list **stash, int fd)
-{
-	char	*buf;
-	int		bytes_read;
-
-	bytes_read = 1;
-	while (!ft_found_newline(*stash) && bytes_read != 0)
-	{
-		buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
-		if (!buf)
-			return (SUCCESS);
-		bytes_read = (int)read(fd, buf, BUFFER_SIZE);
-		if ((*stash == NULL && bytes_read == 0) || bytes_read == -1)
-		{
-			free(buf);
-			return (SUCCESS);
-		}
-		buf[bytes_read] = '\0';
-		if (add_to_stash(stash, buf, bytes_read) == ERR_MALLOC)
-			return (ERR_MALLOC);
-		free(buf);
-	}
-	return (SUCCESS);
-}
-
-int	add_to_stash(t_list **stash, char *buf, int bytes_read)
-{
-	int		i;
-	t_list	*last;
-	t_list	*new_node;
-
-	new_node = (t_list *)malloc(sizeof(t_list));
-	if (!new_node)
-		return (ERR_MALLOC);
-	new_node->next = NULL;
-	new_node->content = (char *)malloc(sizeof(char) * (bytes_read + 1));
-	if (!new_node->content)
-		return (free_stash(&new_node), ERR_MALLOC);
-	i = 0;
-	while (buf[i] && i < bytes_read)
-	{
-		new_node->content[i] = buf[i];
-		i++;
-	}
-	new_node->content[i] = '\0';
-	if (!*stash)
-		return (*stash = new_node, SUCCESS);
-	last = ft_lstlast(*stash);
-	last->next = new_node;
-	return (SUCCESS);
-}
-
-int	extract_line(t_list *stash, char **line)
-{
-	int	i;
-	int	j;
-
-	if (!stash)
-		return (ERR_MALLOC);
-	if (generate_line(stash, line) == ERR_MALLOC)
-		return (ERR_MALLOC);
-	j = 0;
-	while (stash)
-	{
-		i = 0;
-		while (stash->content[i])
-		{
-			if (stash->content[i] == '\n')
-			{
-				(*line)[j++] = stash->content[i];
-				break ;
-			}
-			(*line)[j++] = stash->content[i++];
-		}
-		stash = stash->next;
-	}
-	(*line)[j] = '\0';
-	return (SUCCESS);
-}
-
-void	clean_stash(t_list **stash)
-{
-	t_list	*last;
-	t_list	*clean_node;
-	int		i;
-	int		j;
-
-	clean_node = (t_list *)malloc(sizeof(t_list));
-	if (!stash || !clean_node)
-		return ;
-	clean_node->next = NULL;
-	last = ft_lstlast(*stash);
-	i = 0;
-	while (last->content[i] && last->content[i] != '\n')
-		i++;
-	if (last->content[i] && last->content[i] == '\n')
-		i++;
-	clean_node->content = (char *)malloc(sizeof(char)
-			* ((ft_strlen(last->content) - i) + 1));
-	if (!clean_node->content)
-		return ;
-	j = 0;
-	while (last->content[i])
-		clean_node->content[j++] = last->content[i++];
-	clean_node->content[j] = '\0';
-	free_stash(stash);
-	*stash = clean_node;
+	next_line = get_line(list);
+	polish_list(&list);
+	return (next_line);
 }

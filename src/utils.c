@@ -6,12 +6,12 @@
 /*   By: jmafueni <jmafueni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 15:44:35 by jmafueni          #+#    #+#             */
-/*   Updated: 2024/09/25 22:40:23 by jmafueni         ###   ########.fr       */
+/*   Updated: 2024/09/26 21:25:45 by jmafueni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
-#include "get_next_line.h"
+#include "../include/so_long.h"
+#include "../include/get_next_line.h"
 
 int	is_rectangular(char **map)
 {
@@ -68,4 +68,24 @@ void	free_vars(t_data *data)
 		free(data->vars);
 		data->vars = NULL;
 	}
+}
+
+int	map_error(const char *message, t_data *data)
+{
+	int	i;
+
+	if (message)
+		ft_printf("%s", message);
+	if (data->map)
+	{
+		i = 0;
+		while (data->map[i])
+		{
+			free(data->map[i]);
+			i++;
+		}
+		free(data->map);
+		data->map = NULL;
+	}
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: jmafueni <jmafueni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 16:35:58 by jmafueni          #+#    #+#             */
-/*   Updated: 2024/09/25 21:42:33 by jmafueni         ###   ########.fr       */
+/*   Updated: 2024/09/26 15:54:40 by jmafueni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,29 +19,20 @@
 # include "../libft/libft.h"
 # include <ctype.h>
 # include <fcntl.h>
-# include <unistd.h>
 # include <stdarg.h>
-# include <stdlib.h>
 # include <stdio.h>
+# include <stdlib.h>
 # include <string.h>
-# define  ERR_MALLOC -3
-# define SUCCESS 100
+# include <unistd.h>
+# define ERR_MALLOC -3
 
-/*typedef struct s_list
-{
-	char			*content;
-	struct s_list	*next;
-}					t_list;*/
-
-t_list	*ft_lstlast(t_list *stash);
+int		found_newline(t_list *list);
+t_list	*find_last_node(t_list *list);
+char	*get_line(t_list *list);
+void	copy_str(t_list *list, char *str);
+int		len_to_newline(t_list *list);
+void	polish_list(t_list **list);
 char	*get_next_line(int fd);
-int		ft_found_newline(t_list *stash);
-int		ft_strlen1(char *str);
-int		add_to_stash(t_list **stash, char *buf, int bytes_read);
-int		extract_line(t_list *stash, char **line);
-int		generate_line(t_list *stash, char **line);
-int		read_to_stash(t_list **stash, int fd);
-void	clean_stash(t_list **stash);
-void	free_stash(t_list **stash);
-
+void	dealloc(t_list **list, t_list *clean_node, char *buf);
+void	create_list(t_list **list, int fd);
 #endif

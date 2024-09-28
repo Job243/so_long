@@ -6,11 +6,11 @@
 /*   By: jmafueni <jmafueni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:10:04 by jmafueni          #+#    #+#             */
-/*   Updated: 2024/09/25 22:13:51 by jmafueni         ###   ########.fr       */
+/*   Updated: 2024/09/26 17:22:26 by jmafueni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "so_long.h"
+#include "../include/so_long.h"
 
 void	count_elements(t_data *data, int *player_count,
 		int *exit_count, int *collectibles_count)

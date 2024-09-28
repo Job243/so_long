@@ -6,7 +6,7 @@
 /*   By: jmafueni <jmafueni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 14:48:05 by jmafueni          #+#    #+#             */
-/*   Updated: 2024/01/19 15:39:17 by jmafueni         ###   ########.fr       */
+/*   Updated: 2024/09/26 17:17:31 by jmafueni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,15 +60,3 @@ int	ft_printf(const char *str, ...)
 	va_end(args);
 	return (i);
 }
-
-/*int main(void)
-{
-	unsigned int i = -1;
-	int e = 55;
-	int q = 100;
-	printf("la valeur de i est %u %d %p \n",i , e, &q);
- 	ft_printf("la valeur de i est %u %d %p \n", i,e, &q);
-	printf("printf: %u", printf("la valeur de i est %u %d %p \n", i, e ,&q));
- 	printf("\n");
-	printf("ft_printf: %u", ft_printf("la valeur de i est %u %d %p \n", i, e , &q));
- }*/

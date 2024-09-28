@@ -10,88 +10,119 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "../include/get_next_line.h"
 
-int	ft_found_newline(t_list *stash)
+int	found_newline(t_list *list)
 {
-	int		i;
-	t_list	*current;
+	int	i;
 
-	if (!stash)
+	if (NULL == list)
 		return (0);
-	i = 0;
-	current = ft_lstlast(stash);
-	while (current->content[i])
+	while (list)
 	{
-		if (current->content[i] == '\n')
+		i = 0;
+		while (list->content[i] && i < BUFFER_SIZE)
 		{
-			return (1);
+			if (list->content[i] == '\n')
+				return (1);
+			++i;
 		}
-		i++;
+		list = list->next;
 	}
 	return (0);
 }
 
-t_list	*ft_lstlast(t_list *stash)
+t_list	*find_last_node(t_list *list)
 {
-	t_list	*current;
-
-	if (!stash)
+	if (NULL == list)
 		return (NULL);
-	current = stash;
-	while (current->next)
-		current = current->next;
-	return (current);
+	while (list->next)
+		list = list->next;
+	return (list);
 }
 
-int	generate_line(t_list *stash, char **line)
+/*
+ * Copy (string\n]
+ */
+void	copy_str(t_list *list, char *str)
+{
+	int	i;
+	int	k;
+
+	if (NULL == list)
+		return ;
+	k = 0;
+	while (list)
+	{
+		i = 0;
+		while (list->content[i])
+		{
+			if (list->content[i] == '\n')
+			{
+				str[k++] = '\n';
+				str[k] = '\0';
+				return ;
+			}
+			str[k++] = list->content[i++];
+		}
+		list = list->next;
+	}
+	str[k] = '\0';
+}
+
+/*
+ * find the len to new line in
+ * my linked list
+ */
+int	len_to_newline(t_list *list)
 {
 	int	i;
 	int	len;
 
+	if (NULL == list)
+		return (0);
 	len = 0;
-	while (stash)
+	while (list)
 	{
 		i = 0;
-		while (stash->content[i])
+		while (list->content[i])
 		{
-			if (stash->content[i] == '\n')
+			if (list->content[i] == '\n')
 			{
-				len++;
-				break ;
+				++len;
+				return (len);
 			}
-			len++;
-			i++;
+			++i;
+			++len;
 		}
-		stash = stash->next;
+		list = list->next;
 	}
-	*line = (char *)malloc(sizeof(char) * (len + 1));
-	if (!*line)
-		return (ERR_MALLOC);
-	return (SUCCESS);
+	return (len);
 }
 
-int	ft_strlen1(char *str)
+/*
+ * dealloc all from head
+ * set heat->NULL
+ */
+void	dealloc(t_list **list, t_list *clean_node, char *buf)
 {
-	int	i;
+	t_list	*tmp;
 
-	i = 0;
-	while (str[i] != '\0')
-		i++;
-	return (i);
-}
-
-void	free_stash(t_list **stash)
-{
-	t_list	*current;
-	t_list	*next;
-
-	current = *stash;
-	while (current)
+	if (NULL == *list)
+		return ;
+	while (*list)
 	{
-		free(current->content);
-		next = current->next;
-		free(current);
-		current = next;
+		tmp = (*list)->next;
+		free((*list)->content);
+		free(*list);
+		*list = tmp;
+	}
+	*list = NULL;
+	if (clean_node->content[0])
+		*list = clean_node;
+	else
+	{
+		free(buf);
+		free(clean_node);
 	}
 }
